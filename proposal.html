@@ -1,0 +1,129 @@
+<html>
+<head>
+<title>CMU 15-418 (Spring 2012) Final Project Proposal</title>
+
+<link rel="stylesheet" type="text/css" href="style.css">
+
+</head>
+<body>
+
+<div class="constrainedWidth">
+  
+<div style="padding-bottom: 10px;">
+<div class="title smallTitle">Project Proposal:</div>
+<div class="title" style="width: 900px; padding-bottom: 6px; border-bottom: #000000 2px solid;">
+  ISPC Hardware Performance Monitoring Tool
+</div>
+</div>
+
+<div class="boldText">
+<div>Nipunn Koorapati</div>
+</div>
+
+<div style="padding-top: 1em;"><a href="index.html">Main Project Page</a></div>
+
+<div class="section">Summary</div>
+
+I plan on using x86 hardware performance monitoring instructions and tools to
+measure performance on ISPC compiler generated code. I will insert hardware counter
+instructions into the emitted ISPC code and use the results to measure runtime
+performance.
+
+<div class="section">Background</div>
+
+<p>
+  <a href="http://ispc.github.com">ISPC</a> is a C-like language designed to expose single-program-multiple-data (SPMD) parallelism.
+  <tt>ispc</tt> is an open source compiler for this language which produces vector instructions.
+  Programs written in ISPC frequently see significant speedup due to parallelism in vector hardware units 
+  (in SSE or AVX vector units).
+</p>
+
+<p>
+  Newer Intel processors (Westmere and Sandy Bridge) include 
+  <a href="http://software.intel.com/en-us/articles/intel-performance-counter-monitor/">hardware performance counters</a>
+  for measuring many interesting
+  hardware-level performance metrics including instructions per clock (IPC), L2 and L3 cache
+  miss rates and associated coherency traffic, and TLB miss rates.
+</p>
+
+<div class="section">Challenge</div>
+
+<p>
+The challenge is to combine Intel performance counter instructions with
+the ISPC compiler to obtain useful performance metrics on arbitrary programs.
+</p>
+
+<div class="section">Resources</div>
+
+<p>
+I will be modifying the <a href="http://ispc.github.com">ISPC Compiler</a> using
+<a href="http://software.intel.com/en-us/articles/intel-performance-counter-monitor/">Intel Performance Counters</a>.
+</p>
+
+<p>
+<a href="http://pharr.org/matt">Matt Pharr</a> is a Principal Engineer at Intel
+and the main developer of ISPC. I've emailed him about this project and will
+certainly continue to get his help.
+</p>
+
+<p>
+Agner Fog has written <a href="http://agner.org/optimize/#testp">code</a>
+using these counters which will be useful as a reference.
+</p>
+
+<p>
+<tt>gprof</tt> is a profiling tool used with the <tt>gcc</tt> compiler for profiling
+CPU code without any special hardware counters. Its architecture is described in
+a <a href="http://docs.freebsd.org/44doc/psd/18.gprof/paper.pdf">paper</a>.
+I will likely design the compiler/profiling architecture in a similar way.
+</p>
+
+<div class="section">Goals/Deliverables</div>
+
+<p>
+I plan to add a mode to the ISPC compiler which will emit code
+instrumented with hardware performance instructions.
+When the instrumented program is run, it should output hardware
+performance statistics on the run.
+</p>
+
+<p>
+If I have time, I will try to produce a visualization tool to
+display the statistics across time and/or parts of the code.
+</p>
+
+<div class="section">Platform</div>
+
+<p>
+The ISPC compiler is a good place to use hardware performance
+counters because code written with the ISPC compiler is explicitly
+attempting to take advantage of hardware level parallelism.
+</p>
+
+<div class="section">Proposed Schedule</div>
+
+<div class="comment">[Please do not modify the schedule on this page
+after the proposal process (it is your proposed schedule, and it will
+be useful to compare it to your actually project logs at the end of
+the project).  Update the schedule on your project main page if your
+goals or timeline changes over the course of the project.]</div>
+
+<p>
+<table class="projectSchedule">
+<tr>
+  <td width="110"><span style="font-weight: bold;">Week</span></td>
+  <td width="380"><span style="font-weight: bold;">What I Plan To Do</span></td>
+</tr>
+<tr><td>Apr 1-7</td><td>Run x86 code using performance counters</td></tr>
+<tr><td>Apr 8-14</td><td>Run/modify aobench example in ISPC;</td></tr>
+<tr><td>Apr 15-21</td><td>Emit x86 code in ISPC in interesting spots. Output results</td></tr>
+<tr><td>Apr 22-28</td><td>Analyze results on various ISPC programs</td></tr>
+<tr><td>Apr 29-May 5</td><td>Output results in visual way</td></tr>
+<tr><td>May 6-11</td><td>Write example ISPC programs to show features</td></tr>
+</table>
+</p>
+
+</div>
+
+</body>
+</html>
