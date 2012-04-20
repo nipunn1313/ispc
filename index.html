@@ -37,12 +37,18 @@
   <td width="380"><span style="font-weight: bold;">What I Plan To Do</span></td>
   <td><span style="font-weight: bold;">What I've Actually Done</span></td>
 </tr>
-<tr><td>Apr 1-7</td><td>&nbsp;</td><td>&nbsp;</td></tr>
-<tr><td>Apr 8-14</td><td>&nbsp;</td><td>&nbsp;</td></tr>
-<tr><td>Apr 15-21</td><td>&nbsp;</td><td>&nbsp;</td></tr>
-<tr><td>Apr 22-28</td><td>&nbsp;</td><td>&nbsp;</td></tr>
-<tr><td>Apr 29-May 5</td><td>&nbsp;</td><td>&nbsp;</td></tr>
-<tr><td>May 6-11</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>Apr 1-7</td><td>Run x86 code using performance counters</td>
+                    <td>Looked at Agner Fog's code. Ran it. </td></tr>
+<tr><td>Apr 8-14</td><td>Run/modify aobench example in ISPC;</td>
+                    <td>Got up and running on a Sandy Bride box</td></tr>
+<tr><td>Apr 15-21</td><td>Emit x86 code in ISPC in interesting spots. Output results</td>
+                      <td></td></tr>
+<tr><td>Apr 22-28</td><td>Analyze results on various ISPC programs</td>
+                      <td></td></tr>
+<tr><td>Apr 29-May 5</td><td>Output results in visual way</td>
+                      <td></td></tr>
+<tr><td>May 6-11</td><td>Write example ISPC programs to show features</td>
+                      <td></td></tr>
 </table>
 </p>
 
@@ -55,6 +61,20 @@ of useful information in there.
 <p>
 3/31: Emailed Matt Pharr. Got idea of general steps involved. He linked me
 Agner Fog's code example. Hopefully that should help.
+</p>
+<p>
+4/12: Downloaded and dug around Agner Fog's code example for using perf
+counters. His code is pretty complicated, but it boils down to something
+simple. The RDPMC instruction in x86-64 reads performance monitoring
+couners. They can be reset with another instruction. Complexity arises
+when checking for what architecture is being used, but hopefully I
+won't need to worry about that.
+</p>
+<p>
+4/20: Made commit to ISPC for suggestions for typo'd labels. This was to
+get a hang of the code emitting classes within ISPC. I used a string-distance
+function to find similar labels and suggest them (in goto statements).
+Honestly, I don't think it helped me that much, but it was fun!
 </p>
 
 </div>
