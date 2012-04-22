@@ -40,15 +40,15 @@
 <tr><td>Apr 1-7</td><td>Run x86 code using performance counters</td>
                     <td>Looked at Agner Fog's code. Ran it. </td></tr>
 <tr><td>Apr 8-14</td><td>Run/modify aobench example in ISPC;</td>
-                    <td>Got up and running on a Sandy Bride box</td></tr>
+                     <td>Got up and running on a Sandy Bride box</td></tr>
 <tr><td>Apr 15-21</td><td>Emit x86 code in ISPC in interesting spots. Output results</td>
-                      <td></td></tr>
+                      <td>Ran and worked through ISPCInstrument code</td></tr>
 <tr><td>Apr 22-28</td><td>Analyze results on various ISPC programs</td>
                       <td></td></tr>
 <tr><td>Apr 29-May 5</td><td>Output results in visual way</td>
-                      <td></td></tr>
+                         <td></td></tr>
 <tr><td>May 6-11</td><td>Write example ISPC programs to show features</td>
-                      <td></td></tr>
+                     <td></td></tr>
 </table>
 </p>
 
@@ -75,6 +75,18 @@ won't need to worry about that.
 get a hang of the code emitting classes within ISPC. I used a string-distance
 function to find similar labels and suggest them (in goto statements).
 Honestly, I don't think it helped me that much, but it was fun!
+</p>
+<p>
+4/21: Ran aobench_instrumented code and looked at the underlying ispc
+code. I also ran sqrt code from asst1 with --instrumented. It runs
+WAY WAY slower with instrumentation on. Like 100x slower.
+Hardware performance counters aren't going to be particularly
+useful with slowdowns like that. It's possible that the slowdown
+is due to the function call and once replaced with an inline
+hardware counter increment, it won't be nearly as slow.
+Current instrumentation
+code returns the mask, so we can already look at lane active percentage.
+IPC would be an interesting extra stat though.
 </p>
 
 </div>
