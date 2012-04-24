@@ -11,7 +11,7 @@
   
 <div style="padding-bottom: 10px;">
 
-<div class="title smallTitle">Checkpoint Report:</div>
+<div class="title smallTitle">Checkpoint Report 4/23:</div>
 <div class="title" style="width: 900px; padding-bottom: 6px; border-bottom: #000000 2px solid;">
   ISPC Hardware Performance Monitoring Tool
 </div>
@@ -19,9 +19,60 @@
 
 <div style="padding-top: 1em;"><a href="index.html">Main Project Page</a></div>
 
-<p class="comment">[Your checkpoint writeup goes here.]</p>
+<div class="section">What's done so far</div>
 
+First I got the ISPC compiled and built on my own machine. After realizing that
+my poor laptop's Core2 did not have SSE4 or AVX, I asked for and was granted
+access to a Core i7 machine with AVX instructions. Getting ISPC built there
+was a little more tricky. I had to build LLVM and Clang from source and edit
+the ISPC build system to use different libraries (as the default LLVM installed
+was too old!). I cleaned this up my build system changes and got them
+pulled into ISPC main branch (thanks Matt Pharr!).
 
+Next, I dug into Agner Fog's code for using hardware performance counters.
+His code is super complicated, but it all really boils down to a few
+special instructions to reset and read the hardware counters. Most of
+Agner Fog's code was for checking the architecture/reading the appropriate
+counters. I think I can get the readings I want with only a few instructions.
+
+Next, I took a bit of a detour to dig into ISPC. I figured that there's no
+better way to understand the system than to fix a real issue, so I went and
+found one. I added suggestions for mistyped labels. Now if you have a goto
+with a label mistyped, the code uses string-distance metrics to look for
+similar labels which you might have meant. It's not that useful... but it
+was fun. That code has also been pulled into ISPC main. I have a better
+understanding of the compiler context and function emitting code. I also
+spent a lot of time just looking around and reading code in ISPC.
+
+Most recently, I've been looking at the AOBench_instrumented example and
+its underlying code in ISPC. When compiled with the --instrument flag,
+ISPC expects you to export a function called ISPCInstrument which is
+a callback emitted at various "interesting points" in the code. I
+also ran the sqrt function from asst1 while instrumented. I noticed
+a SEVERE slowdown from instrumentation. First, I'm going to accept
+this slowdown and work with it, but later I want to create different
+levels of instrumentation so the user can have better control. A
+short inline function is fine to have often, but a longer function
+like the one in the AOBench example kills any chance of hardware
+performance counters having meaning.
+
+<div class="section">What's up next</div>
+
+First, I want to try sticking an inline read in the instrumentation
+code. If that significantly reduces the overhead, then I'll work
+from there. If not, I'll look to see if I can reduce how often
+ISPC instruments code. I'll be sure to consult Matt Pharr on the
+issue too. I'm sure he's thought about it before.
+
+<div class="section">What I'll demo</div>
+
+I would like to have a useful instrumentation tool. I would like
+to be able to instrument a piece of code (probably a benchmark),
+and see useful information. What that information is... depends
+on how useful the instrumentation is. I suspect it will be
+something like IPC, or lane fill percentage or branch divergence.
+Although, perhaps it might be something memory related like
+measuring scatter/gather vs sequential memory access.
 
 </div>
 
