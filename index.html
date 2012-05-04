@@ -97,6 +97,31 @@ the driver will crash (AKA blue screen), so he wrapped the driver in a
 safe way. My guess is that he didn't want to make the driver robust for
 performance reasons. I'll send him an email.
 </p>
+<p>
+5/4: For the last week or so, I've been wrangling with the ideas from my
+optimization results and use of hardware counters. I've decided that getting
+hardware counters into ISPC is not really worth it. The important stats
+that I really want to see are accessible through ISPCInstrument without
+using hardware counters. Dealing with the drivers/elevated privilege
+instructions is just not worth it.
+</p>
+<p>
+Here's my new strategy. I'm going to use instrumentation stats to measure
+the divergence in various parts of a program and output it to a file.
+Then, I'm going to make a compiler option to use the profiling run
+as an additional input to the compiler to optimize. This will use
+techniques similar to the cif and cwhile and cfor constructs to
+provide hints to the compiler.
+</p>
+<p>
+Using the sqrt program I measured the following room for improvement. These
+are measured on my laptop using SSE2 instructions (4-wide SIMD):<br/>
+Random input + while: 2.20x speedup<br/>
+Random input + cwhile: 1.90x speedup<br/>
+Coherent input + while: 2.09x speedup<br/>
+Coherent input + cwhile: 2.80x speedup<br/>
+This looks like there's sufficient room for optimization! Now to get to it!
+</p>
 
 </div>
 
