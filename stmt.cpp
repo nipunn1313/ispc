@@ -1042,7 +1042,7 @@ ForStmt::EmitCode(FunctionEmitContext *ctx) const {
 
         FILE *fp = fopen(g->profileHintFileName, "rb");
         if (fp == NULL) {
-            Warning(test->pos, "%s missing.", g->profileHintFileName);
+            Error(test->pos, "Profile hint file %s missing.", g->profileHintFileName);
             break;
         }
 
