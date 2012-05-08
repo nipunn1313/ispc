@@ -406,6 +406,8 @@ int main(int Argc, char *Argv[]) {
             extern int yydebug;
             yydebug = 1;
         }
+        else if (!strncmp(argv[i], "--profile-hint=", 15))
+            g->profileHintFileName = argv[i] + 15;
         else if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--version")) {
             lPrintVersion();
             return 0;

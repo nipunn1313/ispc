@@ -437,6 +437,8 @@ struct Globals {
     /** Additional user-provided directories to search when processing
         #include directives in the preprocessor. */
     std::vector<std::string> includePath;
+
+    const char *profileHintFileName;
 };
 
 enum {

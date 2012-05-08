@@ -1034,46 +1034,50 @@ ForStmt::EmitCode(FunctionEmitContext *ctx) const {
     /* TODO move this code around */
     static std::map<std::string, float> profMap;
     static bool didit = false;
-    if (!didit) {
+    while (!didit) {
         didit = true;
-        FILE *fp = fopen("ispcprof.out", "rb");
 
-        if (fp == NULL) 
-            Warning(test->pos, "ispcprof.out missing.");
-        else {
-            while (fp != NULL && ! feof(fp)) {
-                int fn_len;
-                int note_len;
-                char *fn;
-                char *note;
-                int line;
-                float activePct;
+        if (g->profileHintFileName == NULL)
+            break;
 
-                /* TODO error check */
-                fread(&fn_len, sizeof(int), 1, fp);
-                fn = new char[fn_len + 1];
-                fread(fn, fn_len, 1, fp);
-                fn[fn_len] = '\0';
-                fread(&note_len, sizeof(int), 1, fp);
-                note = new char[note_len + 1];
-                fread(note, note_len, 1, fp);
-                note[note_len] = '\0';
-                fread(&line, sizeof(int), 1, fp);
-                fread(&activePct, sizeof(float), 1, fp);
-
-                if (strcmp(note, "for loop body") == 0) {
-                    char buf[16];
-                    sprintf(buf, ":%04d", line);
-                    std::string s(fn);
-                    s += buf;
-                    profMap[s] = activePct;
-                }
-
-                delete[] fn;
-                delete[] note;
-            }
-            fclose(fp);
+        FILE *fp = fopen(g->profileHintFileName, "rb");
+        if (fp == NULL) {
+            Warning(test->pos, "%s missing.", g->profileHintFileName);
+            break;
         }
+
+        while (fp != NULL && ! feof(fp)) {
+            int fn_len;
+            int note_len;
+            char *fn;
+            char *note;
+            int line;
+            float activePct;
+
+            /* TODO error check */
+            fread(&fn_len, sizeof(int), 1, fp);
+            fn = new char[fn_len + 1];
+            fread(fn, fn_len, 1, fp);
+            fn[fn_len] = '\0';
+            fread(&note_len, sizeof(int), 1, fp);
+            note = new char[note_len + 1];
+            fread(note, note_len, 1, fp);
+            note[note_len] = '\0';
+            fread(&line, sizeof(int), 1, fp);
+            fread(&activePct, sizeof(float), 1, fp);
+
+            if (strcmp(note, "for loop body") == 0) {
+                char buf[16];
+                sprintf(buf, ":%04d", line);
+                std::string s(fn);
+                s += buf;
+                profMap[s] = activePct;
+            }
+
+            delete[] fn;
+            delete[] note;
+        }
+        fclose(fp);
     }
 
     bool profIndicatesCoherent = false;

@@ -611,6 +611,7 @@ Globals::Globals() {
     enableFuzzTest = false;
     fuzzTestSeed = -1;
     mangleFunctionsWithTarget = false;
+    profileHintFileName = NULL;
     
     ctx = new llvm::LLVMContext;
 
