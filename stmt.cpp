@@ -1031,7 +1031,67 @@ ForStmt::EmitCode(FunctionEmitContext *ctx) const {
     if (!dynamic_cast<StmtList *>(stmts))
         ctx->StartScope();
 
-    if (doCoherentCheck && !uniformTest) {
+    /* TODO move this code around */
+    static std::map<std::string, float> profMap;
+    static bool didit = false;
+    if (!didit) {
+        didit = true;
+        FILE *fp = fopen("ispcprof.out", "rb");
+
+        if (fp == NULL) 
+            Warning(test->pos, "ispcprof.out missing.");
+        else {
+            while (fp != NULL && ! feof(fp)) {
+                int fn_len;
+                int note_len;
+                char *fn;
+                char *note;
+                int line;
+                float activePct;
+
+                /* TODO error check */
+                fread(&fn_len, sizeof(int), 1, fp);
+                fn = new char[fn_len + 1];
+                fread(fn, fn_len, 1, fp);
+                fn[fn_len] = '\0';
+                fread(&note_len, sizeof(int), 1, fp);
+                note = new char[note_len + 1];
+                fread(note, note_len, 1, fp);
+                note[note_len] = '\0';
+                fread(&line, sizeof(int), 1, fp);
+                fread(&activePct, sizeof(float), 1, fp);
+
+                if (strcmp(note, "for loop body") == 0) {
+                    char buf[16];
+                    sprintf(buf, ":%04d", line);
+                    std::string s(fn);
+                    s += buf;
+                    profMap[s] = activePct;
+                }
+
+                delete[] fn;
+                delete[] note;
+            }
+            fclose(fp);
+        }
+    }
+
+    bool profIndicatesCoherent = false;
+    {
+        char buf[16];
+        sprintf(buf, ":%04d", pos.first_line);
+        std::string s(pos.name);
+        s += buf;
+        if (profMap.find(s) != profMap.end()) {
+            float activePct = profMap[s];
+            if (activePct > 99.0) {
+                profIndicatesCoherent = true;
+            }
+        }
+    }
+    /* TODO /move this code around */
+
+    if ((doCoherentCheck || profIndicatesCoherent) && !uniformTest) {
         // For 'varying' loops with the coherence check, we start by
         // checking to see if the mask is all on, after it has been updated
         // based on the value of the test.
