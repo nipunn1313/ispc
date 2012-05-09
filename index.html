@@ -12,7 +12,7 @@
 <div style="padding-bottom: 10px;">
 <div class="title smallTitle">CMU 15-418 (Spring 2012) Final Project:</div>
 <div class="title" style="width: 900px; padding-bottom: 6px; border-bottom: #000000 2px solid;">
-  ISPC Hardware Performance Monitoring Tool
+  Improving ISPC compilation using profiling output
 </div>
 </div>
 
@@ -121,6 +121,40 @@ Random input + cwhile: 1.90x speedup<br/>
 Coherent input + while: 2.09x speedup<br/>
 Coherent input + cwhile: 2.80x speedup<br/>
 This looks like there's sufficient room for optimization! Now to get to it!
+</p>
+<p>
+5/8: I've got a working cwhile/while profiler and added code to ISPC to
+use that profiling output to aid in deciding whether or not to use
+use cwhile. I have some metrics on how useful cwhile vs while is
+relative to the percentage of lane sets that are all-on. As you can
+see, cwhile is much more useful when allOnPct is high
+</p>
+
+<p>
+<pre>
+On 4 lane SIMD using SSE2 (my core 2 duo laptop)
+
+allOnPct    serial      while           cwhile          improvement
+-------------------------------------------------------------------
+43.93%      84.1ms      38.6ms(2.18x)   44.6ms(1.88x)   .86 
+58.24%      78.5ms      31.7ms(2.48x)   36.4ms(2.16x)   .87 
+69.46%      61.7ms      24.6ms(2.51x)   25.4ms(2.44x)   .97 
+82.88%      43.1ms      18.3ms(2.35x)   17.7ms(2.43x)   1.03
+86.21%      31.7ms      17.0ms(1.87x)   14.2ms(2.23x)   1.19
+95.18%      28.2ms      14.2ms(1.98x)   11.2ms(2.51x)   1.27
+100.00%     26.7ms      13.1ms(2.04x)    9.6ms(2.78x)   1.36
+
+On a Core-i7 using AVX (cranked up problem size to make numbers reasonable):
+
+allOnPct    serial      while           cwhile          improvement
+-------------------------------------------------------------------
+49.25%      206.2ms     33.6ms(6.13x)   34.6ms(5.95x)   .97 
+61.13%      155.9ms     24.2ms(6.44x)   25.6ms(6.09x)   .95 
+73.98%       99.1ms     18.0ms(5.51x)   19.4ms(5.10x)   .93 
+81.24%       71.1ms     16.0ms(4.44x)   15.8ms(4.51x)   1.02
+90.91%       61.1ms     13.9ms(4.38x)   13.1ms(4.66x)   1.06
+100.0%       57.0ms      9.9ms(5.76x)    9.1ms(6.28x)   1.09
+</pre>
 </p>
 
 </div>
