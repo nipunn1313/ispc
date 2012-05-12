@@ -148,6 +148,23 @@ the effort to do by hand, but are perfect for a compiler.<br/>
 I plan on cleaning up this profiling technique and pull-requesting
 it into ispc. Hopefully you'll see this sort of thing more commonly.
 
+<div class="section">Things I tried but didn't use</div>
+
+I tried to use hardware performance counters as part of my profiling
+function, but I found that they weren't helpful (for various reasons).
+First of all, the instructions are privileged, so you must install
+drivers to get to use them. This means that it is completely hardware
+and OS dependent. Furthermore, either the user would have to install
+bizzare nonstandard drivers (like ones written by Agner Fog), or
+would have to run ispc as admin. The stats I needed were just as
+accessible without hardware counters, so I didn't use them.
+
+<div class="section">References and links</div>
+<a href="http://ispc.github.com">ISPC Project Page</a><br/>
+<a href="mailto:matt.pharr@intel.com">Matt Pharr (Creator of ISPC)</a><br/>
+<a href="http://software.intel.com/en-us/avx/">Intel Intrinsic Guide to SIMD instructions</a><br/>
+<a href="https://github.com/nipunn1313/ispc">My github page</a><br/>
+
 </div>
 
 </body>
